@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class InstagramReelsTrayFeedResult {
+public class InstagramReelsTrayFeedResult extends StatusResult {
 
     public List<InstagramStoryTray> tray;
     public List<InstagramBroadcast> broadcasts;
