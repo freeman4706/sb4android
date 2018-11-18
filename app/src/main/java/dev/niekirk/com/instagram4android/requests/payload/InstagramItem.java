@@ -35,4 +35,6 @@ public class InstagramItem extends StatusResult {
     private String media_infos;
     private String value;
     private String collapse_comments;
+    public List<InstagramVideoVersions> video_versions;
+    public InstagramImageVersions_2 image_versions2;
 }
