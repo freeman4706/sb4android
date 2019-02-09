@@ -10,6 +10,7 @@ import dev.niekirk.com.instagram4android.requests.InstagramFbLoginRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramGetInboxRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramGetRecentActivityRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramLoginRequest;
+import dev.niekirk.com.instagram4android.requests.InstagramLoginTwoFactorRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramSyncFeaturesRequest;
 import dev.niekirk.com.instagram4android.requests.InstagramTimelineFeedRequest;
@@ -17,6 +18,7 @@ import dev.niekirk.com.instagram4android.requests.internal.InstagramFetchHeaders
 import dev.niekirk.com.instagram4android.requests.payload.InstagramFbLoginPayload;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramLoginPayload;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramLoginResult;
+import dev.niekirk.com.instagram4android.requests.payload.InstagramLoginTwoFactorPayload;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramSyncFeaturesPayload;
 import dev.niekirk.com.instagram4android.util.InstagramGenericUtil;
 import dev.niekirk.com.instagram4android.util.InstagramHashUtil;
@@ -79,6 +81,8 @@ public class Instagram4Android {
 
     @Getter @Setter
     private HashMap<String, Cookie> cookieStore = new HashMap<>();
+
+    protected String identifier;
 
     @Builder
     public Instagram4Android(String username, String password, Context context) {
@@ -246,6 +250,38 @@ public class Instagram4Android {
                 .build();
 
         InstagramLoginResult loginResult = this.sendRequest(new InstagramLoginRequest(loginRequest));
+        emulateUserLoggedIn(loginResult);
+
+        if (loginResult.getTwo_factor_info() != null) {
+            identifier = loginResult.getTwo_factor_info().getTwo_factor_identifier();
+        } else if (loginResult.getChallenge() != null) {
+            // logic for challenge
+            //log.info("Challenge required: " + loginResult.getChallenge());
+        }
+        return loginResult;
+    }
+
+    public InstagramLoginResult login(String verificationCode) throws IOException {
+        if (identifier == null) {
+            login();
+        }
+        InstagramLoginTwoFactorPayload loginRequest = InstagramLoginTwoFactorPayload.builder().username(username)
+                .verification_code(verificationCode)
+                .two_factor_identifier(identifier)
+                .password(password)
+                .guid(uuid)
+                .device_id(deviceId)
+                .phone_id(InstagramGenericUtil.generateUuid(true))
+                .login_attempt_account(0)
+                ._csrftoken(getOrFetchCsrf(null))
+                .build();
+        InstagramLoginTwoFactorRequest req = new InstagramLoginTwoFactorRequest(loginRequest);
+        InstagramLoginResult loginResult = this.sendRequest(req);
+        emulateUserLoggedIn(loginResult);
+        return loginResult;
+    }
+
+    private void emulateUserLoggedIn(InstagramLoginResult loginResult) throws IOException {
         if (loginResult.getStatus().equalsIgnoreCase("ok")) {
             this.userId = loginResult.getLogged_in_user().getPk();
             this.rankToken = this.userId + "_" + this.uuid;
@@ -273,9 +309,6 @@ public class Instagram4Android {
 
 
         }
-
-
-        return loginResult;
     }
 
 
