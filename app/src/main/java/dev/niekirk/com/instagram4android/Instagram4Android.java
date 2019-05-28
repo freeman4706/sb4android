@@ -58,7 +58,7 @@ public class Instagram4Android {
     @Getter @Setter
     private String accessToken;
 
-    @Getter
+    @Getter @Setter
     protected boolean isLoggedIn;
 
     @Getter
@@ -83,6 +83,7 @@ public class Instagram4Android {
     private HashMap<String, Cookie> cookieStore = new HashMap<>();
 
     protected String identifier;
+
 
     @Builder
     public Instagram4Android(String username, String password, Context context) {
@@ -311,6 +312,13 @@ public class Instagram4Android {
         }
     }
 
+    public void saveCurrentSession() {
+        InstagramSession session = new InstagramSession();
+
+        session.setSession(this);
+
+        SharedPreferenceUtil.saveInstagramSession(context, session);
+    }
 
     public String getOrFetchCsrf(HttpUrl url) throws IOException {
 
