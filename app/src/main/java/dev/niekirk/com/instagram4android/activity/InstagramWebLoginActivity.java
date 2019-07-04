@@ -50,11 +50,12 @@ public class InstagramWebLoginActivity extends AppCompatActivity {
                 String cookies = CookieManager.getInstance().getCookie(url);
                 String []cookieArray = cookies.split("; ");
                 if (isUserLogged(cookieArray)) {
+                    long userId = getUserId(cookieArray);
                     HashMap<String, Cookie> cookieHashMap = InstagramWebLoginActivity.this.convertCookies(cookieArray);
-                    instagram4Android = Instagram4Android.builder().username("username").password("password").context(InstagramWebLoginActivity.this).build();
+                    instagram4Android = Instagram4Android.builder().username(""+userId).password("password").context(InstagramWebLoginActivity.this).build();
                     instagram4Android.setCookieStore(cookieHashMap);
                     instagram4Android.setLoggedIn(true);
-                    long userId = getUserId(cookieArray);
+
                     instagram4Android.setUserId(userId);
                     instagram4Android.setupIfNeeded();
                     instagram4Android.saveCurrentSession();
