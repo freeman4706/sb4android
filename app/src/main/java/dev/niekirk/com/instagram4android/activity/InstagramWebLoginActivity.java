@@ -59,8 +59,13 @@ public class InstagramWebLoginActivity extends AppCompatActivity {
                     instagram4Android.setupIfNeeded();
                     instagram4Android.saveCurrentSession();
 
+                    Intent resultIntent = new Intent();
 
-                    InstagramWebLoginActivity.this.setResult(InstagramWebLoginActivity.RESULT_CODE_LOGIN_SUCCESSFUL);
+                    resultIntent.putExtra("username", "");
+                    resultIntent.putExtra("pk", userId);
+
+
+                    InstagramWebLoginActivity.this.setResult(InstagramWebLoginActivity.RESULT_CODE_LOGIN_SUCCESSFUL, resultIntent);
                     finish();
 
 
