@@ -48,29 +48,31 @@ public class InstagramWebLoginActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url){
                 String cookies = CookieManager.getInstance().getCookie(url);
-                String []cookieArray = cookies.split("; ");
-                if (isUserLogged(cookieArray)) {
-                    long userId = getUserId(cookieArray);
-                    HashMap<String, Cookie> cookieHashMap = InstagramWebLoginActivity.this.convertCookies(cookieArray);
-                    instagram4Android = Instagram4Android.builder().username(""+userId).password("password").context(InstagramWebLoginActivity.this).build();
-                    instagram4Android.setCookieStore(cookieHashMap);
-                    instagram4Android.setLoggedIn(true);
+                if (cookies != null) {
+                    String []cookieArray = cookies.split("; ");
+                    if (isUserLogged(cookieArray)) {
+                        long userId = getUserId(cookieArray);
+                        HashMap<String, Cookie> cookieHashMap = InstagramWebLoginActivity.this.convertCookies(cookieArray);
+                        instagram4Android = Instagram4Android.builder().username(""+userId).password("password").context(InstagramWebLoginActivity.this).build();
+                        instagram4Android.setCookieStore(cookieHashMap);
+                        instagram4Android.setLoggedIn(true);
 
-                    instagram4Android.setUserId(userId);
-                    instagram4Android.setupIfNeeded();
-                    instagram4Android.saveCurrentSession();
+                        instagram4Android.setUserId(userId);
+                        instagram4Android.setupIfNeeded();
+                        instagram4Android.saveCurrentSession();
 
-                    Intent resultIntent = new Intent();
+                        Intent resultIntent = new Intent();
 
-                    resultIntent.putExtra("username", "");
-                    resultIntent.putExtra("pk", userId);
-
-
-                    InstagramWebLoginActivity.this.setResult(InstagramWebLoginActivity.RESULT_CODE_LOGIN_SUCCESSFUL, resultIntent);
-                    finish();
+                        resultIntent.putExtra("username", "");
+                        resultIntent.putExtra("pk", userId);
 
 
+                        InstagramWebLoginActivity.this.setResult(InstagramWebLoginActivity.RESULT_CODE_LOGIN_SUCCESSFUL, resultIntent);
+                        finish();
+
+                    }
                 }
+
             }
         });
 
