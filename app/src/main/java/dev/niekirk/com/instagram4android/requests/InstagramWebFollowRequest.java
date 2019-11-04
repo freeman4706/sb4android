@@ -16,7 +16,7 @@ import lombok.SneakyThrows;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class InstagramWebFollowRequest extends InstagramPostRequest<StatusResult> {
+public class InstagramWebFollowRequest extends InstagramWebPostRequest<StatusResult> {
 
     private long userId;
 

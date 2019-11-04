@@ -14,7 +14,7 @@ import lombok.SneakyThrows;
  */
 
 @AllArgsConstructor
-public class InstagramWebUnfollowRequest extends InstagramPostRequest<StatusResult> {
+public class InstagramWebUnfollowRequest extends InstagramWebPostRequest<StatusResult> {
 
     private long userId;
 
