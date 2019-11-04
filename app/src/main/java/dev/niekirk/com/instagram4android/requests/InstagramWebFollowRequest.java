@@ -29,16 +29,16 @@ public class InstagramWebFollowRequest extends InstagramPostRequest<StatusResult
     @SneakyThrows
     public String getPayload() {
 
-        Map<String, Object> likeMap = new LinkedHashMap<>();
-        likeMap.put("_uuid", api.getUuid());
-        likeMap.put("_uid", api.getUserId());
-        likeMap.put("user_id", userId);
-        likeMap.put("_csrftoken", api.getOrFetchCsrf(null));
+//        Map<String, Object> likeMap = new LinkedHashMap<>();
+//        likeMap.put("_uuid", api.getUuid());
+//        likeMap.put("_uid", api.getUserId());
+//        likeMap.put("user_id", userId);
+//        likeMap.put("_csrftoken", api.getOrFetchCsrf(null));
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        String payloadJson = mapper.writeValueAsString(likeMap);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String payloadJson = mapper.writeValueAsString(likeMap);
-
-        return payloadJson;
+        return "";
 
     }
 
