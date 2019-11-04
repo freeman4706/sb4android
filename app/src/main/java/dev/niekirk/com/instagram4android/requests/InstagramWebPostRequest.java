@@ -23,16 +23,14 @@ public abstract class InstagramWebPostRequest<T> extends InstagramRequest<T> {
 
         Request request = new Request.Builder()
                 .url(InstagramConstants.API_WEB_URL + getUrl())
-                .addHeader("Connection", "close")
+
                 .addHeader("Connection", "close")
                 .addHeader("Accept", "*/*")
-                .addHeader("Cookie2", "$Version=1")
                 .addHeader("Accept-Language", "en-US")
-                .addHeader("X-IG-Capabilities", "3boBAA==")
-                .addHeader("X-IG-Connection-Type", "WIFI")
-                .addHeader("X-IG-Connection-Speed", "-1kbps")
-                .addHeader("X-IG-App-ID", "567067343352427")
                 .addHeader("User-Agent", InstagramConstants.USER_AGENT)
+                .addHeader("X-IG-App-ID", "1217981644879628")
+                .addHeader("X-Instagram-AJAX", "6f2ac705645c")
+                .addHeader("X-Requested-With", "XMLHttpRequest")
                 .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), encodedUrl))
                 .build();
 
