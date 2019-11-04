@@ -20,7 +20,7 @@ public class InstagramWebUnfollowRequest extends InstagramWebPostRequest<StatusR
 
     @Override
     public String getUrl() {
-        return "web/friendships/" + userId + "/follow/";
+        return "web/friendships/" + userId + "/unfollow/";
     }
 
     @Override

@@ -22,7 +22,7 @@ public class InstagramWebFollowRequest extends InstagramWebPostRequest<StatusRes
 
     @Override
     public String getUrl() {
-        return "web/friendships/" + userId + "/unfollow/";
+        return "web/friendships/" + userId + "/follow/";
     }
 
     @Override
