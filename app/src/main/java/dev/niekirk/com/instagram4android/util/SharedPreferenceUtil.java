@@ -3,6 +3,7 @@ package dev.niekirk.com.instagram4android.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,15 +14,46 @@ import java.util.Collection;
 import java.util.List;
 
 import dev.niekirk.com.instagram4android.model.InstagramSession;
+import dev.niekirk.com.instagram4android.model.InstagramSessionOld;
 import dev.niekirk.com.instagram4android.requests.payload.InstagramUserSummary;
 
 public class SharedPreferenceUtil {
 
 
+    private static InstagramSessionOld parseIfOld(String json) {
+
+        if (json != null && json.contains("\"a\"") && json.contains("\"b\"")) {
+            try {
+                Gson gson = new Gson();
+                InstagramSessionOld result = gson.fromJson(json, InstagramSessionOld.class);
+//                Log.d("SHARED", "------parseIfOld----- \n" + result.toString() + "\n------parseIfOld-----");
+                return result;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//        Log.d("SHARED", "------parseIfOld----- \n" + "null" + "\n------parseIfOld-----");
+        return null;
+    }
+
 
     public static InstagramSession getInstagramSession(Context context)
     {
         String json = PreferenceManager.getDefaultSharedPreferences(context).getString("INSTAGRAM4ANDROID", null);
+
+        //json = SharedPreferenceUtil.convertOldProguardToNew(json);
+//        Log.d("SHARED", "------getInstagramSession----- \n" + json + "\n------getInstagramSession-----");
+
+
+        InstagramSessionOld old  = SharedPreferenceUtil.parseIfOld(json);
+
+        if (old != null) {
+            InstagramSession convertedSession = InstagramSession.convertOldToNew(old);
+            SharedPreferenceUtil.saveInstagramSession(context, convertedSession);
+            return convertedSession;
+        }
+
+
         if (json != null) {
             try {
                 Gson gson = new Gson();
